@@ -1,0 +1,24 @@
+---
+import BlogPost from "../../layouts/BlogPost.astro";
+import { markdownToHtml } from "../../utils/markdownToHtml";
+import getPosts from "../../utils/getPosts";
+
+export async function getStaticPaths() {
+    const posts = await getPosts();
+
+    return await Promise.all(posts.map(async (post: any) => {
+        return {
+            params: { slug: post.slug },
+            props: { post: { ...post, body: await markdownToHtml(post.body) } },
+        };
+    }));
+}
+
+const { slug } = Astro.params;
+const { post } = Astro.props;
+const content = post;
+---
+
+<BlogPost content={content}>
+    <Fragment set:html={post.body} />
+</BlogPost>

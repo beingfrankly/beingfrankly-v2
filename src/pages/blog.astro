@@ -1,0 +1,24 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
+import getPosts from "../utils/getPosts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = await getPosts();
+const CANONICAL = `Blog posts - ${SITE_TITLE}`;
+---
+
+<BaseLayout>
+	<BaseHead
+		title={SITE_TITLE}
+		description={SITE_DESCRIPTION}
+		canonical={CANONICAL}
+		slot="head"
+	/>
+	<Fragment slot="content">
+		<h1>Blog</h1>
+		<ul>
+			{posts.map((post) => <li>{post.title}</li>)}
+		</ul>
+	</Fragment>
+</BaseLayout>
