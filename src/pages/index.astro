@@ -1,6 +1,69 @@
 ---
+import ArticleList from "../components/ArticleList.astro";
+import BaseHead from "../components/BaseHead.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../config";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import getPosts from "../utils/getPosts";
 
-
+const posts = await getPosts(2);
 ---
-<BaseLayout></BaseLayout>
+
+<BaseLayout>
+  <BaseHead
+    title={SITE_TITLE}
+    description={SITE_DESCRIPTION}
+    slot="head"
+  />
+  <Fragment slot="content">
+    <div class="container">
+      <section class="intro">
+        <h1 class="h4">Hi, I'm Frank</h1>
+        <p>
+          I'm a developer advocate & consultant. I write and talk about
+          accessibility, because I want to make it more accessible for everyone.
+        </p>
+      </section>
+      <section class="recent">
+        <h2 class="h6 mx-auto">Recently published</h2>
+        <ArticleList posts={posts} as="3" size="h6 mb-0" />
+      </section>
+    </div>
+  </Fragment>
+</BaseLayout>
+
+<style>
+  .container {
+    display: grid;
+    padding: 0 16px;
+  }
+
+  .intro {
+    width: 55ch;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 4rem;
+  }
+
+  .intro > p {
+    font-size: var(--24px);
+  }
+
+  .recent > h2 {
+    width: fit-content;
+  }
+
+  h1 {
+    position: relative;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .hi {
+    font-size: var(--18px);
+    position: absolute;
+    top: -20px;
+    font-weight: 400;
+  }
+</style>

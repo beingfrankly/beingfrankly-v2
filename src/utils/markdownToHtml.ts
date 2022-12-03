@@ -1,28 +1,23 @@
-import rehypeRaw from 'rehype-raw'
-import rehypeStringify from 'rehype-stringify'
-// import rehypeSlug from 'rehype-slug'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import {unified} from 'unified'
-// import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeRaw from 'rehype-raw';
+import rehypeStringify from 'rehype-stringify';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import remarkUnwrapImages from 'remark-unwrap-images';
+import { unified } from 'unified';
+import * as shiki from 'shiki'
+import withShiki from '@stefanprobst/remark-shiki';
 
 export async function markdownToHtml(body: string): Promise<any> {
-    // const post = await fetch(`${import.meta.env.API_URL}/${slug}`, {
-    //     method: "GET",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${import.meta.env.API_TOKEN}`,
-    //     },
-    // }).then((response) => response.json());
+   const highlighter = await shiki.getHighlighter({ theme: 'github-dark' })
 
-    const html = await unified()
+  const output = await unified()
     .use(remarkParse)
-    .use(remarkRehype, {allowDangerousHtml: true})
+    .use(remarkUnwrapImages)
+    .use(withShiki, { highlighter })
+    .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
-    // .use(rehypeSlug)
-    // .use(rehypeAutolinkHeadings)
     .use(rehypeStringify)
     .process(body);
 
-    return String(html);
+  return String(output);
 }

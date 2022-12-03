@@ -1,0 +1,18 @@
+---
+interface Props {
+  publishedAt: string;
+  updatedAt?: string;
+}
+
+const { publishedAt, updatedAt } = Astro.props;
+const dateTime =
+  updatedAt !== null && typeof updatedAt !== 'undefined' ? updatedAt : publishedAt;
+const time = new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
+  new Date(dateTime)
+);
+---
+
+<p class="article-datetime">
+  {updatedAt !== null && typeof updatedAt !== 'undefined' ? "Updated on " : "Published on "}
+  <time datetime={dateTime}>{time}</time>
+</p>

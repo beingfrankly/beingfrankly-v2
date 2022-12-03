@@ -1,24 +1,42 @@
 ---
-import BlogPost from "../../layouts/BlogPost.astro";
+import "../../styles/article.css";
 import { markdownToHtml } from "../../utils/markdownToHtml";
 import getPosts from "../../utils/getPosts";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BaseHead from "../../components/BaseHead.astro";
+import { SITE_TITLE } from "../../config";
+import { Markdown } from "astro-remote";
+import Link from "../../components/Link.astro";
+import ArticleTime from "../../components/ArticleTime.astro";
 
 export async function getStaticPaths() {
-    const posts = await getPosts();
+  const posts = await getPosts();
 
-    return await Promise.all(posts.map(async (post: any) => {
-        return {
-            params: { slug: post.slug },
-            props: { post: { ...post, body: await markdownToHtml(post.body) } },
-        };
-    }));
+  return await Promise.all(
+    posts.map(async (post: any) => {
+      return {
+        params: { slug: post.slug },
+        props: { post: { ...post, body: await markdownToHtml(post.body) } },
+      };
+    })
+  );
 }
 
-const { slug } = Astro.params;
 const { post } = Astro.props;
-const content = post;
+const TITLE = `${post.title} - ${SITE_TITLE}`;
 ---
 
-<BlogPost content={content}>
-    <Fragment set:html={post.body} />
-</BlogPost>
+<BaseLayout>
+  <BaseHead
+    title={TITLE}
+    description={post.excerpt}
+    slot="head"
+  />
+  <article slot="content">
+    <header>
+      <h1 class="mb-0">{post.title}</h1>
+      <ArticleTime publishedAt={post.publishedAt} updatedAt={post.updatedAt} />
+    </header>
+    <Markdown content={post.body} components={{ a: Link }} />
+  </article>
+</BaseLayout>

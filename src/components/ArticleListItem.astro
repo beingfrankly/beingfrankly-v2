@@ -1,0 +1,55 @@
+---
+import ArticleTime from "./ArticleTime.astro";
+import Heading from "./Heading.astro";
+
+const { title, href, publishedAt, excerpt, as, size } = Astro.props;
+---
+
+<a href={`blog\/${href}`} aria-label={title} aria-describedby={title}>
+  <article>
+    <Heading as={as} size={size}>{title}</Heading>
+    <ArticleTime publishedAt={publishedAt} />
+    <p id={title}>{excerpt}</p>
+    <span class="link" aria-hidden="true"
+      >Read more
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
+      </svg>
+    </span>
+  </article>
+</a>
+
+<style>
+  article time {
+    color: var(--secondary-text);
+    font-weight: 500;
+  }
+
+  .link {
+    font-weight: 500;
+    text-decoration: underline;
+    color: var(--link-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  a {
+    text-decoration: none;
+    outline-offset: 8px;
+  }
+</style>

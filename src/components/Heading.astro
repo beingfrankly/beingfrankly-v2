@@ -1,0 +1,5 @@
+---
+const { as, size } = Astro.props
+const HeadingLevel = 'h' + as;
+---
+<HeadingLevel class:list={[size]}><slot /></HeadingLevel>

@@ -1,0 +1,35 @@
+---
+import ArticleListItem from "./ArticleListItem.astro";
+
+const { posts, as, size } = Astro.props;
+---
+
+<ul class="timeline mx-auto list-none">
+  {
+    posts.map((post) => (
+      <li>
+        <ArticleListItem
+          href={post.slug}
+          title={post.title}
+          excerpt={post.excerpt}
+          publishedAt={post.publishedAt}
+	  as={as}
+	  size={size}
+        />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .timeline {
+    padding: 0 16px;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .timeline {
+      width: 55ch;
+      padding: 0;
+    }
+  }
+</style>

@@ -1,11 +1,12 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 ---
-<header>
-<a href="/">BeingFrankly</a>
-<nav>
-	<HeaderLink href="/">Home</HeaderLink>
-	<HeaderLink href="/blog">Blog</HeaderLink>
-</nav>
-</header>
 
+<header>
+  <HeaderLink href="/" class="logo" aria-label="Homepage"
+    >BeingFrankly</HeaderLink
+  >
+  <nav>
+    <HeaderLink href="/blog">Blog</HeaderLink>
+  </nav>
+</header>
