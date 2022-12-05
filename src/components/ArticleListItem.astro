@@ -2,10 +2,16 @@
 import ArticleTime from "./ArticleTime.astro";
 import Heading from "./Heading.astro";
 
+
+console.log(Astro.url);
+// const SITE_HOST = new URL(Astro.url.origin).host;
 const { title, href, publishedAt, excerpt, as, size } = Astro.props;
+// console.log({SITE_HOST})
+const HREF = Astro.url.origin + '\/blog\/' + href;
+console.log({HREF});
 ---
 
-<a href={`blog\/${href}`} aria-label={title} aria-describedby={title}>
+<a href={HREF} aria-label={title} aria-describedby={title}>
   <article>
     <Heading as={as} size={size}>{title}</Heading>
     <ArticleTime publishedAt={publishedAt} />
