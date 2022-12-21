@@ -23,13 +23,14 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const TITLE = `${post.title} - ${SITE_TITLE}`;
+// const TITLE = post.title} - ${SITE_TITLE}`;
 ---
 
 <BaseLayout>
   <BaseHead
-    title={TITLE}
+    title={post.title}
     description={post.excerpt}
+    type="article"
     slot="head"
   />
   <article slot="content">
