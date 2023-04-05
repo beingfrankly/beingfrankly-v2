@@ -9,6 +9,7 @@
     "strict": true,
     "importsNotUsedAsValues": "error",
     "jsx": "react-jsx",
+    "strictNullChecks": true,
   "experimentalDecorators": true,
 "useDefineForClassFields": false}
 }

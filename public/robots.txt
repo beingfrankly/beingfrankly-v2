@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://beingfrankly.nl/sitemap-index.xml
+Host: https://beingfrankly.nl
+

@@ -10,14 +10,12 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^0.10.1",
-    "@astrojs/rss": "^1.0.0",
-    "@astrojs/sitemap": "^1.0.0",
     "@stefanprobst/remark-shiki": "^2.1.0",
     "@types/marked": "^4.0.7",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
-    "astro": "^1.5.0",
+    "astro": "latest",
+    "@astrojs/sitemap": "latest",
     "astro-remote": "^0.2.3",
     "cssnano": "^5.1.13",
     "date-fns": "^2.29.3",
@@ -30,8 +28,7 @@
     "prismjs": "^1.29.0",
     "rehype-slug": "^5.0.1",
     "remark-unwrap-images": "^3.0.1",
-    "shiki": "^0.10.1",
-    "ultrahtml": "^0.4.0"
+    "shiki": "^0.10.1"
   },
   "dependencies": {
     "autoprefixer": "^10.4.12"

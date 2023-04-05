@@ -1,10 +1,8 @@
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-
-import robotsTxt from "astro-robots-txt";
+import { defineConfig } from "astro/config";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://beingfrankly.nl',
-  integrations: [sitemap(), robotsTxt()]
+  site: "https://beingfrankly.nl",
+  integrations: [sitemap()],
 });
