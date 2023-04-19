@@ -1,21 +1,19 @@
 ---
 import ArticleListItem from "./ArticleListItem.astro";
-
-const { posts, as, size } = Astro.props;
+import type { CollectionEntry } from "astro:content";
+interface Props {
+  contentItems: CollectionEntry<"blog">[];
+  as: string;
+  size: string;
+}
+const { contentItems, as, size } = Astro.props;
 ---
 
 <ul class="timeline mx-auto list-none">
   {
-    posts.map((post) => (
+    contentItems.map((contentItem) => (
       <li>
-        <ArticleListItem
-          href={post.slug}
-          title={post.title}
-          excerpt={post.excerpt}
-          publishedAt={post.publishedAt}
-	  as={as}
-	  size={size}
-        />
+        <ArticleListItem contentItem={contentItem} as={as} size={size} />
       </li>
     ))
   }

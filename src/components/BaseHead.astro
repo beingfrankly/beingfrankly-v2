@@ -4,23 +4,27 @@ import "../styles/fonts.css";
 import { SITE_TITLE } from "../config";
 
 export interface Props {
-	title: string;
-	description: string;
-	image?: string;
-	type?: string;
+  title?: string;
+  description: string;
+  image?: string;
+  type?: string;
 }
 
-const { title, description, image = "/placeholder-social.jpg", type = "website" } = Astro.props;
-const TITLE = `${title} - ${SITE_TITLE}`;
+const { title, description, type = "website" } = Astro.props;
+const TITLE = title ? `${title} - ${SITE_TITLE}` : SITE_TITLE;
 ---
+
 <!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Primary Meta Tags -->
-<title>{title}</title>
+<title>{TITLE}</title>
 <meta name="title" content={TITLE} />
 <meta name="description" content={description} />
 <link rel="canonical" href={Astro.url.toString()} />
@@ -32,11 +36,10 @@ const TITLE = `${title} - ${SITE_TITLE}`;
 <meta property="og:title" content={title} />
 <meta property="og:locale" content="en_GB" />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta property="twitter:creator" content="@frank_vaneldijk" />

@@ -1,25 +1,18 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
-import getPosts from "../utils/getPosts";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ArticleList from "../components/ArticleList.astro";
-const posts = await getPosts();
+import { getCollection } from "astro:content";
+const blogEntries = await getCollection("blog");
 
-const CANONICAL = `Blog - ${SITE_TITLE}`;
+const title = "Blog";
+const description = "A collection of blog posts about accessibility";
 ---
 
 <BaseLayout>
-  <BaseHead
-    title={SITE_TITLE}
-    description={SITE_DESCRIPTION}
-    canonical={CANONICAL}
-    slot="head"
-  />
+  <BaseHead title={title} description={description} slot="head" />
   <Fragment slot="content">
     <h1 class="h4 mx-auto">Blog</h1>
-    <ArticleList posts={posts} as="2" size="h5 mb-0"></ArticleList>
+    <ArticleList contentItems={blogEntries} as="2" size="h5 mb-0" />
   </Fragment>
 </BaseLayout>
-
-

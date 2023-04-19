@@ -1,5 +1,15 @@
 declare module 'astro:content' {
 	interface Render {
+		'.mdx': Promise<{
+			Content: import('astro').MarkdownInstance<{}>['Content'];
+			headings: import('astro').MarkdownHeading[];
+			remarkPluginFrontmatter: Record<string, any>;
+		}>;
+	}
+}
+
+declare module 'astro:content' {
+	interface Render {
 		'.md': Promise<{
 			Content: import('astro').MarkdownInstance<{}>['Content'];
 			headings: import('astro').MarkdownHeading[];
@@ -13,11 +23,41 @@ declare module 'astro:content' {
 	export type CollectionEntry<C extends keyof typeof entryMap> =
 		(typeof entryMap)[C][keyof (typeof entryMap)[C]];
 
-	export const image: () => import('astro/zod').ZodObject<{
+	// TODO: Remove this when having this fallback is no longer relevant. 2.3? 3.0? - erika, 2023-04-04
+	/**
+	 * @deprecated
+	 * `astro:content` no longer provide `image()`.
+	 *
+	 * Please use it through `schema`, like such:
+	 * ```ts
+	 * import { defineCollection, z } from "astro:content";
+	 *
+	 * defineCollection({
+	 *   schema: ({ image }) =>
+	 *     z.object({
+	 *       image: image(),
+	 *     }),
+	 * });
+	 * ```
+	 */
+	export const image: never;
+
+	// This needs to be in sync with ImageMetadata
+	export type ImageFunction = () => import('astro/zod').ZodObject<{
 		src: import('astro/zod').ZodString;
 		width: import('astro/zod').ZodNumber;
 		height: import('astro/zod').ZodNumber;
-		format: import('astro/zod').ZodString;
+		format: import('astro/zod').ZodUnion<
+			[
+				import('astro/zod').ZodLiteral<'png'>,
+				import('astro/zod').ZodLiteral<'jpg'>,
+				import('astro/zod').ZodLiteral<'jpeg'>,
+				import('astro/zod').ZodLiteral<'tiff'>,
+				import('astro/zod').ZodLiteral<'webp'>,
+				import('astro/zod').ZodLiteral<'gif'>,
+				import('astro/zod').ZodLiteral<'svg'>
+			]
+		>;
 	}>;
 
 	type BaseSchemaWithoutEffects =
@@ -33,15 +73,10 @@ declare module 'astro:content' {
 		| BaseSchemaWithoutEffects
 		| import('astro/zod').ZodEffects<BaseSchemaWithoutEffects>;
 
+	export type SchemaContext = { image: ImageFunction };
+
 	type BaseCollectionConfig<S extends BaseSchema> = {
-		schema?: S;
-		slug?: (entry: {
-			id: CollectionEntry<keyof typeof entryMap>['id'];
-			defaultSlug: string;
-			collection: string;
-			body: string;
-			data: import('astro/zod').infer<S>;
-		}) => string | Promise<string>;
+		schema?: S | ((context: SchemaContext) => S);
 	};
 	export function defineCollection<S extends BaseSchema>(
 		input: BaseCollectionConfig<S>
@@ -70,13 +105,72 @@ declare module 'astro:content' {
 		filter?: (entry: CollectionEntry<C>) => unknown
 	): Promise<CollectionEntry<C>[]>;
 
+	type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
 	type InferEntrySchema<C extends keyof typeof entryMap> = import('astro/zod').infer<
-		Required<ContentConfig['collections'][C]>['schema']
+		ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
 	>;
 
 	const entryMap: {
-		
+		"blog": {
+"A modern dark mode - part one.mdx": {
+  id: "A modern dark mode - part one.mdx",
+  slug: "a-modern-dark-mode",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"Are our links visually accessible.mdx": {
+  id: "Are our links visually accessible.mdx",
+  slug: "are-our-links-visually-accessible",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"Don't skip on the skip link.mdx": {
+  id: "Don't skip on the skip link.mdx",
+  slug: "dont-skip-the-skip-link",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"How accessible are links.mdx": {
+  id: "How accessible are links.mdx",
+  slug: "how-accessible-are-links",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"How to have an accessible input while the label isn’t present.mdx": {
+  id: "How to have an accessible input while the label isn’t present.mdx",
+  slug: "accessible-input-without-label",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"The differences between the ARIA labeling variants.mdx": {
+  id: "The differences between the ARIA labeling variants.mdx",
+  slug: "differences-between-aria-labeling-variants",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"The rules on using ARIA.mdx": {
+  id: "The rules on using ARIA.mdx",
+  slug: "rules-on-using-aria",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+"The what, why and how on labels.mdx": {
+  id: "The what, why and how on labels.mdx",
+  slug: "what-why-and-how-on-labels",
+  body: string,
+  collection: "blog",
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".mdx"] },
+},
+
 	};
 
-	type ContentConfig = never;
+	type ContentConfig = typeof import("../src/content/config");
 }
