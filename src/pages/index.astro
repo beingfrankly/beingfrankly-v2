@@ -1,19 +1,15 @@
 ---
+import { getCollection } from "astro:content";
 import ArticleList from "../components/ArticleList.astro";
 import BaseHead from "../components/BaseHead.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../config";
+import { SITE_DESCRIPTION } from "../config";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import getPosts from "../utils/getPosts";
-
-const posts = await getPosts(2);
+const blogEntries = await getCollection("blog");
+const topThree = blogEntries.slice(0, 3);
 ---
 
 <BaseLayout>
-  <BaseHead
-    title={SITE_TITLE}
-    description={SITE_DESCRIPTION}
-    slot="head"
-  />
+  <BaseHead description={SITE_DESCRIPTION} slot="head" />
   <Fragment slot="content">
     <div class="container">
       <section class="intro">
@@ -25,7 +21,7 @@ const posts = await getPosts(2);
       </section>
       <section class="recent">
         <h2 class="h6 mx-auto">Recently published</h2>
-        <ArticleList posts={posts} as="3" size="h6 mb-0" />
+        <ArticleList contentItems={topThree} as="3" size="h6 mb-0" />
       </section>
     </div>
   </Fragment>

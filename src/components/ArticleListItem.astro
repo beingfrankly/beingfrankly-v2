@@ -1,16 +1,30 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import ArticleTime from "./ArticleTime.astro";
 import Heading from "./Heading.astro";
 
-const { title, href, publishedAt, excerpt, as, size } = Astro.props;
-const HREF = Astro.url.origin + "/blog/" + href;
+interface Props {
+  contentItem: CollectionEntry<"blog">;
+  as: string;
+  size: string;
+}
+
+const { contentItem, as, size } = Astro.props;
+const HREF = Astro.url.origin + "/blog/" + contentItem.slug;
 ---
 
-<a href={HREF} aria-label={title} aria-describedby={title}>
+<a
+  href={HREF}
+  aria-label={contentItem.data.title}
+  aria-describedby={contentItem.data.id}
+>
   <article>
-    <Heading as={as} size={size}>{title}</Heading>
-    <ArticleTime publishedAt={publishedAt} />
-    <p id={title}>{excerpt}</p>
+    <Heading as={as} size={size}>{contentItem.data.title}</Heading>
+    <ArticleTime
+      publishedAt={contentItem.data.publishedDate}
+      updatedAt={contentItem.data.updatedAt}
+    />
+    <p id={contentItem.data.id}>{contentItem.data.excerpt}</p>
     <span class="link" aria-hidden="true"
       >Read more
       <svg

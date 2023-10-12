@@ -1,41 +1,41 @@
 ---
 import "../../styles/article.css";
-import { markdownToHtml } from "../../utils/markdownToHtml";
-import getPosts from "../../utils/getPosts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BaseHead from "../../components/BaseHead.astro";
-import { Markdown } from "astro-remote";
-import Link from "../../components/Link.astro";
 import ArticleTime from "../../components/ArticleTime.astro";
+import Link from "../../components/Link.astro";
 
-export async function getStaticPaths() {
-  const posts = await getPosts();
-
-  return await Promise.all(
-    posts.map(async (post: any) => {
-      return {
-        params: { slug: post.slug },
-        props: { post: { ...post, body: await markdownToHtml(post.body) } },
-      };
-    })
-  );
+import { getEntry } from "astro:content";
+// 1. Get the slug from the incoming server request
+const { slug } = Astro.params;
+if (slug === undefined) {
+  throw new Error("Slug is required");
 }
-
-const { post } = Astro.props;
+// 2. Query for the entry directly using the request slug
+const entry = await getEntry("blog", slug);
+// 3. Redirect if the entry does not exist
+if (entry === undefined) {
+  return Astro.redirect("/404");
+}
+// 4. (Optional) Render the entry to HTML in the template
+const { Content } = await entry.render();
 ---
 
 <BaseLayout>
   <BaseHead
-    title={post.title}
-    description={post.excerpt}
+    title={entry.data.title}
+    description={entry.data.excerpt}
     type="article"
     slot="head"
   />
   <article slot="content">
     <header>
-      <h1 class="mb-0">{post.title}</h1>
-      <ArticleTime publishedAt={post.publishedAt} updatedAt={post.updatedAt} />
+      <h1 class="mb-0">{entry.data.title}</h1>
+      <ArticleTime
+        publishedAt={entry.data.publishedDate}
+        updatedAt={entry.data.updatedAt}
+      />
+      <Content />
     </header>
-    <Markdown content={post.body} components={{ a: Link }} />
   </article>
 </BaseLayout>

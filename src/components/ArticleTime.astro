@@ -1,18 +1,24 @@
 ---
+import { getDateTimeFormat, getContentItemDate } from "../utils/datetime";
+
 interface Props {
-  publishedAt: string;
-  updatedAt?: string;
+  updatedAt: Date;
+  publishedAt?: Date;
 }
 
 const { publishedAt, updatedAt } = Astro.props;
-const dateTime =
-  updatedAt !== null && typeof updatedAt !== 'undefined' ? updatedAt : publishedAt;
-const time = new Intl.DateTimeFormat("en-GB", { dateStyle: "full" }).format(
-  new Date(dateTime)
-);
+
+// If the content item has been updated, and the published date is in the past, we want to show the date it was updated.
+// If the content item has not been updated, we want to show the date it was published.
+const dateTime = getContentItemDate(updatedAt, publishedAt);
+const dateTimeFormat = getDateTimeFormat(new Date(dateTime));
 ---
 
 <p class="article-datetime">
-  {updatedAt !== null && typeof updatedAt !== 'undefined' ? "Updated on " : "Published on "}
-  <time datetime={dateTime}>{time}</time>
+  {
+    updatedAt !== null && typeof updatedAt !== "undefined"
+      ? "Updated on "
+      : "Published on "
+  }
+  <time datetime={dateTime}>{dateTimeFormat}</time>
 </p>
