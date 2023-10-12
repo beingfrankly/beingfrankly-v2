@@ -3,19 +3,22 @@ import "../../styles/article.css";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BaseHead from "../../components/BaseHead.astro";
 import ArticleTime from "../../components/ArticleTime.astro";
-import { getCollection } from "astro:content";
 import Link from "../../components/Link.astro";
 
-export async function getStaticPaths() {
-  const blogEntries = await getCollection("blog");
-  return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
-  }));
+import { getEntry } from "astro:content";
+// 1. Get the slug from the incoming server request
+const { slug } = Astro.params;
+if (slug === undefined) {
+  throw new Error("Slug is required");
 }
-
-const { entry } = Astro.props;
-const { Content, components } = await entry.render();
+// 2. Query for the entry directly using the request slug
+const entry = await getEntry("blog", slug);
+// 3. Redirect if the entry does not exist
+if (entry === undefined) {
+  return Astro.redirect("/404");
+}
+// 4. (Optional) Render the entry to HTML in the template
+const { Content } = await entry.render();
 ---
 
 <BaseLayout>
@@ -29,10 +32,10 @@ const { Content, components } = await entry.render();
     <header>
       <h1 class="mb-0">{entry.data.title}</h1>
       <ArticleTime
-        publishedAt={entry.data.publishedAt}
+        publishedAt={entry.data.publishedDate}
         updatedAt={entry.data.updatedAt}
       />
-      <Content components={{ ...components, a: Link }} />
+      <Content />
     </header>
   </article>
 </BaseLayout>
