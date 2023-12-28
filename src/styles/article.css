@@ -1,6 +1,3 @@
-@use postcss-preset-env;
-@use postcss-nesting;
-
 article {
   width: 100%;
 
@@ -27,7 +24,7 @@ article {
     display: block;
     padding: 0;
   }
-   & :is(code, img, figure, picture, pre, blockquote) {
+  & :is(code, img, figure, picture, pre, blockquote) {
     margin-bottom: var(--rhythm);
   }
 
@@ -36,7 +33,6 @@ article {
     margin-bottom: 8px;
   }
 
-  
   & a {
     display: inline-flex;
     align-items: center;

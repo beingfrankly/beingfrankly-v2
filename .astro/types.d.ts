@@ -203,8 +203,8 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"How to have an accessible input while the label isn’t present.md": {
-	id: "How to have an accessible input while the label isn’t present.md";
+"How to have an accessible input while the label isn't present.md": {
+	id: "How to have an accessible input while the label isn't present.md";
   slug: "accessible-input-without-label";
   body: string;
   collection: "blog";
@@ -231,8 +231,6 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-};
-"tips": {
 };
 
 	};
