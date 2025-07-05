@@ -1,10 +1,10 @@
 ---
-title: "Hello World"
+title: 'Hello World'
 createdAt: 2024-01-15T10:00:00.000Z
 modifiedAt: null
 publishedAt: 2024-01-15T10:00:00.000Z
 published: true
-tags: ["astro", "blog", "introduction"]
+tags: ['astro', 'blog', 'introduction']
 ---
 
 # Hello World
@@ -25,4 +25,4 @@ This is a sample post to demonstrate the new content structure. The content is n
 - **Content Collections**: Organized content management
 - **Markdown Support**: Rich content with frontmatter
 
-Stay tuned for more posts! 
+Stay tuned for more posts!
