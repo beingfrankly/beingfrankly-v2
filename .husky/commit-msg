@@ -1,0 +1,17 @@
+# Simple commit message validation
+# Ensure commit message is not empty and has a reasonable length
+commit_msg=$(cat "$1")
+if [ -z "$commit_msg" ]; then
+  echo "Error: Commit message cannot be empty"
+  exit 1
+fi
+
+if [ ${#commit_msg} -lt 3 ]; then
+  echo "Error: Commit message is too short"
+  exit 1
+fi
+
+if [ ${#commit_msg} -gt 100 ]; then
+  echo "Warning: Commit message is quite long (${#commit_msg} characters)"
+  echo "Consider using a shorter subject line and detailed body"
+fi 
