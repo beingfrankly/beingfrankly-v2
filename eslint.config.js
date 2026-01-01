@@ -8,7 +8,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 export default [
   // Note: This config focuses on code quality, not formatting.
   // Prettier handles all formatting concerns to avoid conflicts.
-  
+
   // Global ignores
   {
     ignores: [
@@ -82,7 +82,7 @@ export default [
       ],
       'import/no-unresolved': [
         'error',
-        { ignore: ['^astro:', '^@typescript-eslint/'] },
+        { ignore: ['^astro:', '^astro/', '^@typescript-eslint/'] },
       ],
       'import/no-duplicates': 'error',
       'no-console': 'warn',

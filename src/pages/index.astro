@@ -1,14 +1,18 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from "../config";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from '../config';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = await getCollection('blog')
-  .then(posts => posts
+const posts = await getCollection('blog').then(posts =>
+  posts
     .filter(post => post.data.published)
-    .sort((a, b) => new Date(b.data.publishedAt || b.data.createdAt).getTime() - new Date(a.data.publishedAt || a.data.createdAt).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.data.publishedAt || b.data.createdAt).getTime() -
+        new Date(a.data.publishedAt || a.data.createdAt).getTime()
+    )
     .slice(0, 3)
-  );
+);
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -20,17 +24,25 @@ const posts = await getCollection('blog')
         accessibility, because I want to make it more accessible for everyone.
       </p>
     </section>
-    
+
     <section class="recent">
       <h2>Recently published</h2>
       <ul class="posts">
         {
-          posts.map((post) => (
+          posts.map(post => (
             <li>
               <article>
-                <h3><a href={`/blog/${post.slug}`}>{post.data.title}</a></h3>
-                <time datetime={post.data.publishedAt?.toISOString() || post.data.createdAt.toISOString()}>
-                  {post.data.publishedAt?.toLocaleDateString() || post.data.createdAt.toLocaleDateString()}
+                <h3>
+                  <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                </h3>
+                <time
+                  datetime={
+                    post.data.publishedAt?.toISOString() ||
+                    post.data.createdAt.toISOString()
+                  }
+                >
+                  {post.data.publishedAt?.toLocaleDateString() ||
+                    post.data.createdAt.toLocaleDateString()}
                 </time>
               </article>
             </li>

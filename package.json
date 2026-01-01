@@ -28,11 +28,11 @@
     ]
   },
   "devDependencies": {
-    "@astrojs/sitemap": "latest",
+    "@astrojs/sitemap": "^3.6.0",
     "@eslint/js": "^9.30.1",
     "@typescript-eslint/eslint-plugin": "^8.35.1",
     "@typescript-eslint/parser": "^8.35.1",
-    "astro": "latest",
+    "astro": "^5.16.6",
     "cssnano": "^5.1.13",
     "eslint": "^9.30.1",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -43,8 +43,8 @@
     "lint-staged": "^16.1.2",
     "postcss-nesting": "^10.2.0",
     "postcss-preset-env": "^7.8.2",
-    "prettier": "^2.7.1",
-    "prettier-plugin-astro": "^0.7.0"
+    "prettier": "^3.7.4",
+    "prettier-plugin-astro": "^0.14.1"
   },
   "dependencies": {
     "autoprefixer": "^10.4.12"
