@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Test files
+coverage/
+*.test.*
+*.spec.*
+
+# Documentation
+README.md
+CHANGELOG.md
+LICENSE
+
+# Docker files (not needed inside container)
+Dockerfile
+docker-compose.yml
+.dockerignore
