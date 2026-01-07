@@ -1,25 +1,92 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
-import getPosts from "../utils/getPosts";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import ArticleList from "../components/ArticleList.astro";
-const posts = await getPosts();
+import { SITE_DESCRIPTION } from '../config';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-const CANONICAL = `Blog - ${SITE_TITLE}`;
+// Get all blog posts and filter published ones
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter(post => post.data.published)
+  .sort(
+    (a, b) =>
+      new Date(b.data.publishedAt || b.data.createdAt).getTime() -
+      new Date(a.data.publishedAt || a.data.createdAt).getTime()
+  );
 ---
 
-<BaseLayout>
-  <BaseHead
-    title={SITE_TITLE}
-    description={SITE_DESCRIPTION}
-    canonical={CANONICAL}
-    slot="head"
-  />
-  <Fragment slot="content">
-    <h1 class="h4 mx-auto">Blog</h1>
-    <ArticleList posts={posts} as="2" size="h5 mb-0"></ArticleList>
-  </Fragment>
+<BaseLayout title="Blog" description={SITE_DESCRIPTION}>
+  <h1>Blog</h1>
+
+  <ul class="timeline">
+    {
+      posts.map(post => (
+        <li>
+          <article>
+            <h2>
+              <a href={`/blog/${post.id}`}>{post.data.title}</a>
+            </h2>
+            <time
+              datetime={
+                post.data.publishedAt?.toISOString() ||
+                post.data.createdAt.toISOString()
+              }
+            >
+              {post.data.publishedAt?.toLocaleDateString() ||
+                post.data.createdAt.toLocaleDateString()}
+            </time>
+            {post.data.tags && (
+              <div class="tags">
+                {post.data.tags.map((tag: string) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </article>
+        </li>
+      ))
+    }
+  </ul>
 </BaseLayout>
 
+<style>
+  .timeline {
+    list-style: none;
+    padding: 0;
+    max-width: 55ch;
+    margin: 0 auto;
+  }
 
+  .timeline li {
+    margin-bottom: 2rem;
+  }
+
+  .timeline h2 {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .timeline a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .timeline a:hover {
+    text-decoration: underline;
+  }
+
+  .timeline time {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .tags {
+    margin-top: 0.5rem;
+  }
+
+  .tag {
+    background: #f0f0f0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+  }
+</style>

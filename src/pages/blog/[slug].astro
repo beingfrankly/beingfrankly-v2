@@ -1,41 +1,141 @@
 ---
-import "../../styles/article.css";
-import { markdownToHtml } from "../../utils/markdownToHtml";
-import getPosts from "../../utils/getPosts";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import BaseHead from "../../components/BaseHead.astro";
-import { Markdown } from "astro-remote";
-import Link from "../../components/Link.astro";
-import ArticleTime from "../../components/ArticleTime.astro";
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const posts = await getPosts();
-
-  return await Promise.all(
-    posts.map(async (post: any) => {
-      return {
-        params: { slug: post.slug },
-        props: { post: { ...post, body: await markdownToHtml(post.body) } },
-      };
-    })
-  );
+  const posts = await getCollection('blog');
+  return posts
+    .filter(post => post.data.published)
+    .map(post => ({
+      params: { slug: post.id },
+      props: { post },
+    }));
 }
 
 const { post } = Astro.props;
+const { Content } = await render(post);
 ---
 
-<BaseLayout>
-  <BaseHead
-    title={post.title}
-    description={post.excerpt}
-    type="article"
-    slot="head"
-  />
-  <article slot="content">
+<BaseLayout
+  title={post.data.title}
+  description={post.data.title}
+  type="article"
+>
+  <article>
     <header>
-      <h1 class="mb-0">{post.title}</h1>
-      <ArticleTime publishedAt={post.publishedAt} updatedAt={post.updatedAt} />
+      <h1>{post.data.title}</h1>
+      <time
+        datetime={post.data.publishedAt?.toISOString() ||
+          post.data.createdAt.toISOString()}
+      >
+        Published: {
+          post.data.publishedAt?.toLocaleDateString() ||
+            post.data.createdAt.toLocaleDateString()
+        }
+      </time>
+      {
+        post.data.modifiedAt && (
+          <time datetime={post.data.modifiedAt.toISOString()}>
+            Updated: {post.data.modifiedAt.toLocaleDateString()}
+          </time>
+        )
+      }
+      {
+        post.data.tags && (
+          <div class="tags">
+            {post.data.tags.map((tag: string) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )
+      }
     </header>
-    <Markdown content={post.body} components={{ a: Link }} />
+
+    <div class="content">
+      <Content />
+    </div>
   </article>
 </BaseLayout>
+
+<style>
+  article {
+    max-width: 65ch;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  header {
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    margin: 0 0 1rem 0;
+  }
+
+  time {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tags {
+    margin-top: 1rem;
+  }
+
+  .tag {
+    background: #f0f0f0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+  }
+
+  .content {
+    line-height: 1.6;
+  }
+
+  .content h2,
+  .content h3,
+  .content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .content p {
+    margin-bottom: 1rem;
+  }
+
+  .content ul,
+  .content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+  }
+
+  .content blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+  }
+
+  .content code {
+    background: #f0f0f0;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+  }
+
+  .content pre {
+    background: #f0f0f0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+
+  .content pre code {
+    background: none;
+    padding: 0;
+  }
+</style>

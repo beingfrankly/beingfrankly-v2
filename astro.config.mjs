@@ -1,8 +1,8 @@
-import { defineConfig } from "astro/config";
-import sitemap from "@astrojs/sitemap";
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://beingfrankly.nl",
+  site: 'https://beingfrankly.nl',
   integrations: [sitemap()],
 });
